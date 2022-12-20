@@ -1,0 +1,199 @@
+python flask 정리
+
+* (web 에서의) redirection 이란?
+	- 다시 지시하다(re + direct) 라는 뜻을 가진다. 
+	- 브라우저에게 다른 URL 을 지시하는 것을 리다이렉트라고 한다고 한다.
+	- ex ) 로그인을 한 회원만 볼 수 있는 마이페이지가 있을 때, 로그인하지 않은 사람이 마이페이지 url 로 
+		접속하려고 한다고 하자. 이때, 로그인하지 않은 회원의 경우, 마이페이지에 접속할 수 있는
+		권한이 없기 때문에 로그인 페이지로 리다이렉트를 걸거나, 메인 페이지로 리다이렉트 걸어줄 수 있다.
+	
+* flask.redirect()
+	
+	- 호출될 경우, 클라이언트를 대상 위치로 redirection 하는 응답 오브젝트(WSGL Application)를 리턴한다.
+	- 리다이렉트 하는 위치를 인자로 받는다 
+
+* flask template 연속 상속하기
+	
+	- 기존 index.html 과 index_with_suganglist 사이에, block 으로 처리해서 이어주다시피 할 수 있다.
+	- 정확히는 부모 자식처럼 상속하는 것이다
+	- 부모 html 에서는, {% block ~~~ %}{% endblock %} 요렇게 적어주면된다
+	- 자식 html 에서는 {% extends 'index.html' %} 
+	- {% block ~~~~ %}
+	- 내용물
+	- {% endblock %}
+	- 이런 식으로 안에 내용물을 적어줄 수 있다.
+	- 자식 html을 랜더링했을 때, 부모 html 에다가 block 부분이 다 들어가서 랜더링된다고 이해하면 된다.
+	- 코드의 재생산성을 아주 높게 만들어버릴 수 있다. 이런 문법으로 인해서, react 의 component 와 비슷하게 
+	- 사용해버릴 수 있다는 것은 아주 큰 장점이 될 수 있을 것이다.
+
+
+* 연산 후 다시 처리하기
+	- 그냥 ['GET','POST'] 둘다 method 에 넣어준다 
+	- 그리고 되었으면 그냥 flask의 flash 를 통해서 메세지 박스로 메세지를 넣어준다.
+	- 안되었으면, 예외 처리를 하면서 메세지 박스로 메세지를 넣어주고, 다시 render_template(원래거) 해준다.
+
+
+* MySQL - Trigger 사용
+
+	- 일단 추가하기 전에 넣자 
+	- 신청하는 과목이 이미 relation 에 있는지 체크해야 함
+	- 신청하는 과목이 개설되어 있는지 체크해야 함
+	- 신청하는 과목이 시간이 겹치는지 확인해야 함 
+	- 신청하는 과목중 교양이 3개 이상인지 확인해야 함
+	- 신청하는 과목의 수강정원이 넘치지 않는지 확인해야 함.
+	- 총 누적학점이 24학점 이상이 되는지 확인해야 함.
+
+	- 그냥 Trigger 에서는, AFTER 해서 넣어주기만 하자. 
+	- 들어가야 할 항목 : 학번, 이미 선택한 시간대 
+
+	- python 에서 체크할 사항
+		- 이미 relation 에 있는지? -> 쿼리문 넣어서, studentid, code 전체가 겹치는게 있는지 확인 - 3번
+		- 신청하는 과목이 개설되어 있는지? -> 쿼리문 넣어서, empty set 이면 안된다 - 2번
+		- 신청하는 과목이 시간겹치는지? -> 신청하는 학번이, 그 시간대에 수업을 들어서는 안된다 - 5번
+		- 교양이 3개이상인지? -> 교양 등의 여부는, 그냥 두개를 넣었을 때 자동으로 다 찾아서 넣는식으로 하자. - 4번
+		- 총 누적학점이 24학점 이상인지? -> 이거는, 그냥 credit도 속성으로 넣어 버리고, python 에서 
+			처리해서 해결하는것으로 하자. - 1번
+
+	- 그러면 추가로 만들어야 할 테이블? : 학번 - 수강시간 테이블
+	- 그리고 general_course_info 랑 join 해서 credit 합계도 봐야함.
+		- 굳이 credit을 넣을 필요는 없겠다.
+	
+	
+	- 1,2,3,4,5를 위해 필요한 정보들
+
+		v - 0. 그 과목의 code, 교양여부, 수업시간, 학점(일단 0번부터 알아야 함. 그런데 0번을 알면 자연히 2번을 안다)
+	
+		v - 1. 그 사람의 학번, 누적학점 넘치는지 여부
+		v - 2.  개설정보 (테이블에 있는지) : empty set인지 여부 
+		v - 3.  그 사람에게 이미 신청되어 있는 과목인지(1번과 연계 가능)
+		v - 4. 그 사람이 신청한 교양 정보(1번과 연계가능)
+		- 5. 시간 겹치는지 여부
+
+	: 1,3,4 는 한방에 처리하자. 그리고 2번 
+
+
+select S.GeneralCourseCode, S.CourseClassNumber,N.CourseName, G.Credit, G.Type
+        from sugangpack S, CourseName N, general_course_info G 
+        where S.GeneralCourseCode = N.GeneralCourseCode and N.GeneralCourseCode = G.GeneralCourseCode
+        and StudentID = 2015116293
+
+
+
+MySQL 에서 TRIGGER 사용하면서, 만들어 놓은 쿼리문 결과 새로운 곳에 집어넣어 주기
+
+1. 프로시저  : 여러 쿼리를 한번에 수행하는 것
+- SQL 문법의 함수와 유사한 느낌이지만, 차이가 있다고 한다 
+- 하지만, 하나의 요청으로 여러 SQL 문을 실행할 수 있고, 네트워크 소요시간을 줄일 수 있다
+- 보수성이 뛰어나며, 개발업무를 구분하여 개발할 수 있는 장점이 있다고 한다 
+
+2. 커서 만들기
+- 프로시저 내부에서 복수 행을 처리할 때 사용하는 구성 요소
+- 파일 포인터가 열린 파일에서의 현재 위치를 표시하는 것처럼, 커서는 결과 집합에서 현재 위치를 표시할 수 있다.
+- 쿼리의 행 집합에서 한 행씩 옮겨가며 명령을 처리한다 
+- OPEN, FETCH, CLOSE 문을 사용하며 커서를 제어할 수 있다.
+- CURSOR 의 작동 순서
+	- 커서 선언(DECLARE)
+	- 반복 조건 선언(DECLARE, HANDLER)
+	- 커서 열기(OPEN)
+	- 커서에서 데이터 가져오기(FETCH)
+	- 데이터 처리
+	- 커서 닫기(CLOSE)
+
+- TRIGGER 에서도 사용가능 하다. 
+
+DELIMITER $$
+CREATE TRIGGER update_sugang_time
+	AFTER INSERT
+	ON sugangpack
+	FOR EACH ROW
+
+BEGIN
+	DECLARE done INT DEFAULT FALSE;
+	DECLARE timeCode VARCHAR(3);
+	DECLARE week VARCHAR(9);
+
+	DECLARE getTime CURSOR FOR
+	SELECT CourseTimeCode, CourseTimeWeek FROM coursetime 
+		WHERE GeneralCourseCode = NEW.GeneralCourseCode and 
+		CourseClassNumber = NEW.CourseClassNumber;
+
+	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+	OPEN getTime;
+
+	update_sugangtime : LOOP
+
+		FETCH getTime INTO timeCode, week;
+	
+		IF done THEN
+			LEAVE update_sugangtime;
+		END IF;
+
+		INSERT INTO sugangtime(StudentID,CourseTimeCode,CourseTimeWeek)
+		VALUES(NEW.StudentID,timeCode,week);
+
+		
+
+	END LOOP;
+
+	CLOSE getTime;
+
+END $$
+
+DELIMITER ;
+	
+	
+DELIMITER $$
+CREATE TRIGGER delete_sugang_time
+	AFTER DELETE
+	ON sugangpack
+	FOR EACH ROW
+
+BEGIN
+	DECLARE done INT DEFAULT FALSE;
+	DECLARE timeCode VARCHAR(3);
+	DECLARE week VARCHAR(9);
+
+	DECLARE deleteTime CURSOR FOR
+	SELECT CourseTimeCode, CourseTimeWeek FROM coursetime 
+		WHERE GeneralCourseCode = OLD.GeneralCourseCode and 
+		CourseClassNumber = OLD.CourseClassNumber;
+
+	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+	OPEN deleteTime;
+
+	delete_sugangtime : LOOP
+		
+		FETCH deleteTime INTO timeCode, week;
+
+		IF done THEN
+			LEAVE delete_sugangtime;
+		END IF;
+
+		DELETE FROM sugangtime 
+		WHERE CourseTimeCode = timeCode and CourseTimeWeek = week;
+
+	END LOOP;
+	CLOSE deleteTime;
+
+	
+END $$
+
+DELIMITER ;
+
+예외 상황 점검
+
+v- 이미 신청한 과목인 경우 추가불가
+v- 2학기 개설되지않은 교과목 신청불가
+v- 시간겹치면 안됨 
+v- 교양과목 최대 3개 허용
+v- 24학점 초과 금지
+v 추가 : 올바른 값으로 입력하기! 라는 메세지 출력할 수 있게 하기(학번,과목코드)
+v 추가 : 아직 담지않은 애 삭제 시 막기
+v- 수강정원 2명
+
+해야할 일 정리
+
+
+	

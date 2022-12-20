@@ -1,0 +1,747 @@
+create database fallsemester_2022 default character set utf8;
+
+use mysql;
+
+create user 'forFallSemester'@localhost identified by '1234';
+
+use fallsemester_2022;
+
+grant all privileges on fallsemester_2022.* to 'forFallSemester'@'localhost';
+
+flush privileges;
+
+show grants for forFallSemester@'localhost';
+
+CREATE TABLE TERMS(
+	OpenYear INT(4) NOT NULL,
+	Semester INT(1) NOT NULL,
+	term VARCHAR(10) NOT NULL,
+	PRIMARY KEY(term)
+);
+
+
+CREATE TABLE GENERAL_COURSE_INFO(
+	GeneralCourseCode VARCHAR(8) NOT NULL,
+	StudYear INT(1) NOT NULL,
+	Type VARCHAR(5) NOT NULL,
+	Credit INT(1) NOT NULL,
+	Lecture INT(1) NOT NULL,
+	Practice INT(1) NOT NULL,
+	PRIMARY KEY(GeneralCourseCode)
+);
+
+
+CREATE TABLE COURSENAME(
+	CourseName VARCHAR(25) NOT NULL,
+	GeneralCourseCode VARCHAR(8) NOT NULL,
+	PRIMARY KEY(GeneralCourseCode)
+);
+
+CREATE TABLE COURSETIME(
+	GeneralCourseCode VARCHAR(8) NOT NULL,
+	CourseClassNumber INT(2) NOT NULL,
+	CourseTimeCode VARCHAR(3) NOT NULL,
+	CourseTimeWeek VARCHAR(9) NOT NULL,
+	PRIMARY KEY(GeneralCourseCode, CourseClassNumber)
+);
+
+CREATE TABLE College_Department(
+	Department VARCHAR(30) NOT NULL,
+	College VARCHAR(10) NOT NULL,
+	PRIMARY KEY(Department)
+);
+
+CREATE TABLE TIME_INFO(
+	CourseTimeCode VARCHAR(3) NOT NULL,
+	CourseTime2 CHAR(4) NOT NULL,
+	PRIMARY KEY(CourseTimeCode)
+);
+
+CREATE TABLE COURSE(
+	Term VARCHAR(10) NOT NULL,
+	Department VARCHAR(30) NOT NULL,
+	GeneralCourseCode VARCHAR(8) NOT NULL,
+	CourseClassNumber INT(2) NOT NULL,
+	Lecturer VARCHAR(8) NOT NULL,
+	LectureBuilding VARCHAR(40) NOT NULL,
+	LectureRoom VARCHAR(5) NOT NULL,
+	StudQuota INT(1) NOT NULL,
+	StudTake INT(1) DEFAULT 0,
+	PRIMARY KEY(GeneralCourseCode, CourseClassNumber)
+);
+		
+
+INSERT INTO Terms VALUES(2022,2,"2022-2");
+
+INSERT INTO coursename VALUES('실용화법','CLTR0003' );
+INSERT INTO coursename VALUES('서양의역사와문화','CLTR0043' );      
+INSERT INTO coursename VALUES('회계와사회생활','CLTR0089' );        
+INSERT INTO coursename VALUES('대학글쓰기','CLTR0205' );
+INSERT INTO coursename VALUES('이산수학','COME0301' );
+INSERT INTO coursename VALUES('확률및통계','COME0311' );
+INSERT INTO coursename VALUES('자료구조','COME0331' );
+INSERT INTO coursename VALUES('정보보호론','COME0368' );
+INSERT INTO coursename VALUES('프로그래밍기초','COMP0204' );        
+INSERT INTO coursename VALUES('자료구조응용','COMP0216' );
+INSERT INTO coursename VALUES('소프트웨어설계','COMP0224' );        
+INSERT INTO coursename VALUES('운영체제','COMP0312' );
+INSERT INTO coursename VALUES('데이타베이스','COMP0322' );
+INSERT INTO coursename VALUES('모바일앱프로그래밍1','COMP0328' );   
+INSERT INTO coursename VALUES('컴퓨터구조','COMP0411' );
+INSERT INTO coursename VALUES('프로그래밍언어론','COMP0423' );      
+INSERT INTO coursename VALUES('IT기술경영개론','COMP0428' );        
+INSERT INTO coursename VALUES('컴퓨팅사고와 SW코딩','COMP0453' );   
+INSERT INTO coursename VALUES('창의융합설계','GLSO0213' );
+INSERT INTO coursename VALUES('컴퓨터망프로그래밍','GLSO0217' );    
+INSERT INTO coursename VALUES('대규모병렬컴퓨팅','ITEC0418' );      
+INSERT INTO coursename VALUES('데이터과학기초','ITEC0419' );        
+INSERT INTO coursename VALUES('컴퓨터비전','ITEC0424' );
+
+INSERT INTO college_department VALUES('컴퓨터학부 글로벌소프트웨어융합전공','IT대학');
+
+INSERT INTO general_course_info VALUES('CLTR0003',1,'교양',3,3,0);
+INSERT INTO general_course_info VALUES('CLTR0043',2,'교양',3,3,0);
+INSERT INTO general_course_info VALUES('CLTR0089',3,'교양',3,3,0);
+INSERT INTO general_course_info VALUES('CLTR0205',1,'교양',3,3,0);
+INSERT INTO general_course_info VALUES('COME0301',1,'전공',3,3,0);
+INSERT INTO general_course_info VALUES('COME0311',2,'전공',3,3,0);
+INSERT INTO general_course_info VALUES('COME0331',1,'전공필수',3,3,0);
+INSERT INTO general_course_info VALUES('COME0368',4,'전공',3,3,0);
+INSERT INTO general_course_info VALUES('COMP0204',1,'전공필수',6,4,4);
+INSERT INTO general_course_info VALUES('COMP0216',1,'전공',3,2,2);
+INSERT INTO general_course_info VALUES('COMP0224',2,'전공',3,3,0);
+INSERT INTO general_course_info VALUES('COMP0312',2,'전공필수',3,3,0);
+INSERT INTO general_course_info VALUES('COMP0322',2,'전공',3,2,2);
+INSERT INTO general_course_info VALUES('COMP0328',3,'전공',3,2,2);
+INSERT INTO general_course_info VALUES('COMP0411',4,'전공',3,3,0);
+INSERT INTO general_course_info VALUES('COMP0423',4,'전공',3,3,0);
+INSERT INTO general_course_info VALUES('COMP0428',4,'전공',3,3,0);
+INSERT INTO general_course_info VALUES('COMP0453',1,'전공',3,2,2);
+INSERT INTO general_course_info VALUES('GLSO0213',1,'전공',3,2,2);
+INSERT INTO general_course_info VALUES('GLSO0217',2,'전공',3,2,2);
+INSERT INTO general_course_info VALUES('ITEC0418',4,'전공',3,3,0);
+INSERT INTO general_course_info VALUES('ITEC0419',2,'전공',3,3,0);
+INSERT INTO general_course_info VALUES('ITEC0424',4,'전공',3,3,0);
+
+INSERT INTO time_info VALUES('1A','0900');
+INSERT INTO time_info VALUES('1B','0930');
+INSERT INTO time_info VALUES('2A','1000');
+INSERT INTO time_info VALUES('2B','1030');
+INSERT INTO time_info VALUES('3A','1100');
+INSERT INTO time_info VALUES('3B','1130');
+INSERT INTO time_info VALUES('4A','1200');
+INSERT INTO time_info VALUES('4B','1230');
+INSERT INTO time_info VALUES('5A','1300');
+INSERT INTO time_info VALUES('5B','1330');
+INSERT INTO time_info VALUES('6A','1400');
+INSERT INTO time_info VALUES('6B','1430');
+INSERT INTO time_info VALUES('7A','1500');
+INSERT INTO time_info VALUES('7B','1530');
+INSERT INTO time_info VALUES('8A','1600');
+INSERT INTO time_info VALUES('8B','1630');
+INSERT INTO time_info VALUES('9A','1700');
+INSERT INTO time_info VALUES('9B','1730');
+INSERT INTO time_info VALUES('10A','1800');
+INSERT INTO time_info VALUES('10B','1830');
+INSERT INTO time_info VALUES('11A','1900');
+INSERT INTO time_info VALUES('11B','1930');
+INSERT INTO time_info VALUES('12A','2000');
+INSERT INTO time_info VALUES('12B','2030');
+INSERT INTO time_info VALUES('13A','2100');
+INSERT INTO time_info VALUES('13B','2130');
+INSERT INTO time_info VALUES('14A','2200');
+INSERT INTO time_info VALUES('14B','2230');
+
+INSERT INTO coursetime VALUES('CLTR0003',5,'1A','화');
+INSERT INTO coursetime VALUES('CLTR0003',5,'1B','화');
+INSERT INTO coursetime VALUES('CLTR0003',5,'2A','화');
+INSERT INTO coursetime VALUES('CLTR0003',5,'2B','목');
+INSERT INTO coursetime VALUES('CLTR0003',5,'3A','목');
+INSERT INTO coursetime VALUES('CLTR0003',5,'3B','목');
+INSERT INTO coursetime VALUES('CLTR0003',6,'1A','화');
+INSERT INTO coursetime VALUES('CLTR0003',6,'1B','화');
+INSERT INTO coursetime VALUES('CLTR0003',6,'2A','화');
+INSERT INTO coursetime VALUES('CLTR0003',6,'2B','목');
+INSERT INTO coursetime VALUES('CLTR0003',6,'3A','목');
+INSERT INTO coursetime VALUES('CLTR0003',6,'3B','목');
+INSERT INTO coursetime VALUES('CLTR0043',7,'8B','화');
+INSERT INTO coursetime VALUES('CLTR0043',7,'9A','화');
+INSERT INTO coursetime VALUES('CLTR0043',7,'9B','화');
+INSERT INTO coursetime VALUES('CLTR0043',7,'8B','목');
+INSERT INTO coursetime VALUES('CLTR0043',7,'9A','목');
+INSERT INTO coursetime VALUES('CLTR0043',7,'9B','목');
+INSERT INTO coursetime VALUES('CLTR0089',4,'7A','토');
+INSERT INTO coursetime VALUES('CLTR0089',4,'7B','토');
+INSERT INTO coursetime VALUES('CLTR0089',4,'8A','토');
+INSERT INTO coursetime VALUES('CLTR0089',4,'8B','토');
+INSERT INTO coursetime VALUES('CLTR0089',4,'9A','토');
+INSERT INTO coursetime VALUES('CLTR0089',4,'9B','토');
+INSERT INTO coursetime VALUES('CLTR0205',36,'2B','화');
+INSERT INTO coursetime VALUES('CLTR0205',36,'3A','화');
+INSERT INTO coursetime VALUES('CLTR0205',36,'3B','화');
+INSERT INTO coursetime VALUES('CLTR0205',36,'1A','목');
+INSERT INTO coursetime VALUES('CLTR0205',36,'1B','목');
+INSERT INTO coursetime VALUES('CLTR0205',36,'2A','목');
+INSERT INTO coursetime VALUES('CLTR0205',37,'2B','화');
+INSERT INTO coursetime VALUES('CLTR0205',37,'3A','화');
+INSERT INTO coursetime VALUES('CLTR0205',37,'3B','화');
+INSERT INTO coursetime VALUES('CLTR0205',37,'1A','목');
+INSERT INTO coursetime VALUES('CLTR0205',37,'1B','목');
+INSERT INTO coursetime VALUES('CLTR0205',37,'2A','목');
+INSERT INTO coursetime VALUES('CLTR0205',38,'2B','화');
+INSERT INTO coursetime VALUES('CLTR0205',38,'3A','화');
+INSERT INTO coursetime VALUES('CLTR0205',38,'3B','화');
+INSERT INTO coursetime VALUES('CLTR0205',38,'1A','목');
+INSERT INTO coursetime VALUES('CLTR0205',38,'1B','목');
+INSERT INTO coursetime VALUES('CLTR0205',38,'2A','목');
+INSERT INTO coursetime VALUES('CLTR0205',39,'2B','화');
+INSERT INTO coursetime VALUES('CLTR0205',39,'3A','화');
+INSERT INTO coursetime VALUES('CLTR0205',39,'3B','화');
+INSERT INTO coursetime VALUES('CLTR0205',39,'1A','목');
+INSERT INTO coursetime VALUES('CLTR0205',39,'1B','목');
+INSERT INTO coursetime VALUES('CLTR0205',39,'2A','목');
+INSERT INTO coursetime VALUES('COME0301',10,'2B','화');
+INSERT INTO coursetime VALUES('COME0301',10,'3A','화');
+INSERT INTO coursetime VALUES('COME0301',10,'3B','화');
+INSERT INTO coursetime VALUES('COME0301',10,'2B','목');
+INSERT INTO coursetime VALUES('COME0301',10,'3A','목');
+INSERT INTO coursetime VALUES('COME0301',10,'3B','목');
+INSERT INTO coursetime VALUES('COME0301',11,'7A','수');
+INSERT INTO coursetime VALUES('COME0301',11,'7B','수');
+INSERT INTO coursetime VALUES('COME0301',11,'8A','수');
+INSERT INTO coursetime VALUES('COME0301',11,'7A','금');
+INSERT INTO coursetime VALUES('COME0301',11,'7B','금');
+INSERT INTO coursetime VALUES('COME0301',11,'8A','금');
+INSERT INTO coursetime VALUES('COME0301',12,'1A','월');
+INSERT INTO coursetime VALUES('COME0301',12,'1B','월');
+INSERT INTO coursetime VALUES('COME0301',12,'2A','월');
+INSERT INTO coursetime VALUES('COME0301',12,'2B','수');
+INSERT INTO coursetime VALUES('COME0301',12,'3A','수');
+INSERT INTO coursetime VALUES('COME0301',12,'3B','수');
+INSERT INTO coursetime VALUES('COME0301',13,'1A','월');
+INSERT INTO coursetime VALUES('COME0301',13,'1B','월');
+INSERT INTO coursetime VALUES('COME0301',13,'2A','월');
+INSERT INTO coursetime VALUES('COME0301',13,'1A','수');
+INSERT INTO coursetime VALUES('COME0301',13,'1B','수');
+INSERT INTO coursetime VALUES('COME0301',13,'2A','수');
+INSERT INTO coursetime VALUES('COME0301',14,'5B','월');
+INSERT INTO coursetime VALUES('COME0301',14,'6A','월');
+INSERT INTO coursetime VALUES('COME0301',14,'6B','월');
+INSERT INTO coursetime VALUES('COME0301',14,'5B','수');
+INSERT INTO coursetime VALUES('COME0301',14,'6A','수');
+INSERT INTO coursetime VALUES('COME0301',14,'6B','수');
+INSERT INTO coursetime VALUES('COME0311',5,'1A','월');
+INSERT INTO coursetime VALUES('COME0311',5,'1B','월');
+INSERT INTO coursetime VALUES('COME0311',5,'2A','월');
+INSERT INTO coursetime VALUES('COME0311',5,'2B','수');
+INSERT INTO coursetime VALUES('COME0311',5,'3A','수');
+INSERT INTO coursetime VALUES('COME0311',5,'3B','수');
+INSERT INTO coursetime VALUES('COME0311',6,'2B','월');
+INSERT INTO coursetime VALUES('COME0311',6,'3A','월');
+INSERT INTO coursetime VALUES('COME0311',6,'3B','월');
+INSERT INTO coursetime VALUES('COME0311',6,'1A','수');
+INSERT INTO coursetime VALUES('COME0311',6,'1B','수');
+INSERT INTO coursetime VALUES('COME0311',6,'2A','수');
+INSERT INTO coursetime VALUES('COME0331',6,'5B','월');
+INSERT INTO coursetime VALUES('COME0331',6,'6A','월');
+INSERT INTO coursetime VALUES('COME0331',6,'6B','월');
+INSERT INTO coursetime VALUES('COME0331',6,'5B','수');
+INSERT INTO coursetime VALUES('COME0331',6,'6A','수');
+INSERT INTO coursetime VALUES('COME0331',6,'6B','수');
+INSERT INTO coursetime VALUES('COME0331',7,'5B','월');
+INSERT INTO coursetime VALUES('COME0331',7,'6A','월');
+INSERT INTO coursetime VALUES('COME0331',7,'6B','월');
+INSERT INTO coursetime VALUES('COME0331',7,'5B','수');
+INSERT INTO coursetime VALUES('COME0331',7,'6A','수');
+INSERT INTO coursetime VALUES('COME0331',7,'6B','수');
+INSERT INTO coursetime VALUES('COME0331',8,'5B','월');
+INSERT INTO coursetime VALUES('COME0331',8,'6A','월');
+INSERT INTO coursetime VALUES('COME0331',8,'6B','월');
+INSERT INTO coursetime VALUES('COME0331',8,'5B','수');
+INSERT INTO coursetime VALUES('COME0331',8,'6A','수');
+INSERT INTO coursetime VALUES('COME0331',8,'6B','수');
+INSERT INTO coursetime VALUES('COME0331',9,'5B','월');
+INSERT INTO coursetime VALUES('COME0331',9,'6A','월');
+INSERT INTO coursetime VALUES('COME0331',9,'6B','월');
+INSERT INTO coursetime VALUES('COME0331',9,'5B','수');
+INSERT INTO coursetime VALUES('COME0331',9,'6A','수');
+INSERT INTO coursetime VALUES('COME0331',9,'6B','수');
+INSERT INTO coursetime VALUES('COME0368',1,'7A','화');
+INSERT INTO coursetime VALUES('COME0368',1,'7B','화');
+INSERT INTO coursetime VALUES('COME0368',1,'8A','화');
+INSERT INTO coursetime VALUES('COME0368',1,'5B','목');
+INSERT INTO coursetime VALUES('COME0368',1,'6A','목');
+INSERT INTO coursetime VALUES('COME0368',1,'6B','목');
+INSERT INTO coursetime VALUES('COMP0204',1,'6A','화');
+INSERT INTO coursetime VALUES('COMP0204',1,'6B','화');
+INSERT INTO coursetime VALUES('COMP0204',1,'7A','화');
+INSERT INTO coursetime VALUES('COMP0204',1,'7B','화');
+INSERT INTO coursetime VALUES('COMP0204',1,'8A','화');
+INSERT INTO coursetime VALUES('COMP0204',1,'8B','화');
+INSERT INTO coursetime VALUES('COMP0204',1,'9A','화');
+INSERT INTO coursetime VALUES('COMP0204',1,'9B','화');
+INSERT INTO coursetime VALUES('COMP0204',1,'6A','목');
+INSERT INTO coursetime VALUES('COMP0204',1,'6B','목');
+INSERT INTO coursetime VALUES('COMP0204',1,'7A','목');
+INSERT INTO coursetime VALUES('COMP0204',1,'7B','목');
+INSERT INTO coursetime VALUES('COMP0204',1,'8A','목');
+INSERT INTO coursetime VALUES('COMP0204',1,'8B','목');
+INSERT INTO coursetime VALUES('COMP0204',1,'9A','목');
+INSERT INTO coursetime VALUES('COMP0204',1,'9B','목');
+INSERT INTO coursetime VALUES('COMP0204',2,'6A','화');
+INSERT INTO coursetime VALUES('COMP0204',2,'6B','화');
+INSERT INTO coursetime VALUES('COMP0204',2,'7A','화');
+INSERT INTO coursetime VALUES('COMP0204',2,'7B','화');
+INSERT INTO coursetime VALUES('COMP0204',2,'8A','화');
+INSERT INTO coursetime VALUES('COMP0204',2,'8B','화');
+INSERT INTO coursetime VALUES('COMP0204',2,'9A','화');
+INSERT INTO coursetime VALUES('COMP0204',2,'9B','화');
+INSERT INTO coursetime VALUES('COMP0204',2,'6A','목');
+INSERT INTO coursetime VALUES('COMP0204',2,'6B','목');
+INSERT INTO coursetime VALUES('COMP0204',2,'7A','목');
+INSERT INTO coursetime VALUES('COMP0204',2,'7B','목');
+INSERT INTO coursetime VALUES('COMP0204',2,'8A','목');
+INSERT INTO coursetime VALUES('COMP0204',2,'8B','목');
+INSERT INTO coursetime VALUES('COMP0204',2,'9A','목');
+INSERT INTO coursetime VALUES('COMP0204',2,'9B','목');
+INSERT INTO coursetime VALUES('COMP0204',3,'6A','화');
+INSERT INTO coursetime VALUES('COMP0204',3,'6B','화');
+INSERT INTO coursetime VALUES('COMP0204',3,'7A','화');
+INSERT INTO coursetime VALUES('COMP0204',3,'7B','화');
+INSERT INTO coursetime VALUES('COMP0204',3,'8A','화');
+INSERT INTO coursetime VALUES('COMP0204',3,'8B','화');
+INSERT INTO coursetime VALUES('COMP0204',3,'9A','화');
+INSERT INTO coursetime VALUES('COMP0204',3,'9B','화');
+INSERT INTO coursetime VALUES('COMP0204',3,'6A','목');
+INSERT INTO coursetime VALUES('COMP0204',3,'6B','목');
+INSERT INTO coursetime VALUES('COMP0204',3,'7A','목');
+INSERT INTO coursetime VALUES('COMP0204',3,'7B','목');
+INSERT INTO coursetime VALUES('COMP0204',3,'8A','목');
+INSERT INTO coursetime VALUES('COMP0204',3,'8B','목');
+INSERT INTO coursetime VALUES('COMP0204',3,'9A','목');
+INSERT INTO coursetime VALUES('COMP0204',3,'9B','목');
+INSERT INTO coursetime VALUES('COMP0204',4,'6A','화');
+INSERT INTO coursetime VALUES('COMP0204',4,'6B','화');
+INSERT INTO coursetime VALUES('COMP0204',4,'7A','화');
+INSERT INTO coursetime VALUES('COMP0204',4,'7B','화');
+INSERT INTO coursetime VALUES('COMP0204',4,'8A','화');
+INSERT INTO coursetime VALUES('COMP0204',4,'8B','화');
+INSERT INTO coursetime VALUES('COMP0204',4,'9A','화');
+INSERT INTO coursetime VALUES('COMP0204',4,'9B','화');
+INSERT INTO coursetime VALUES('COMP0204',4,'6A','목');
+INSERT INTO coursetime VALUES('COMP0204',4,'6B','목');
+INSERT INTO coursetime VALUES('COMP0204',4,'7A','목');
+INSERT INTO coursetime VALUES('COMP0204',4,'7B','목');
+INSERT INTO coursetime VALUES('COMP0204',4,'8A','목');
+INSERT INTO coursetime VALUES('COMP0204',4,'8B','목');
+INSERT INTO coursetime VALUES('COMP0204',4,'9A','목');
+INSERT INTO coursetime VALUES('COMP0204',4,'9B','목');
+INSERT INTO coursetime VALUES('COMP0216',1,'7A','월');
+INSERT INTO coursetime VALUES('COMP0216',1,'7B','월');
+INSERT INTO coursetime VALUES('COMP0216',1,'8A','월');
+INSERT INTO coursetime VALUES('COMP0216',1,'8B','월');
+INSERT INTO coursetime VALUES('COMP0216',1,'7A','수');
+INSERT INTO coursetime VALUES('COMP0216',1,'7B','수');
+INSERT INTO coursetime VALUES('COMP0216',1,'8A','수');
+INSERT INTO coursetime VALUES('COMP0216',1,'8B','수');
+INSERT INTO coursetime VALUES('COMP0216',2,'7A','월');
+INSERT INTO coursetime VALUES('COMP0216',2,'7B','월');
+INSERT INTO coursetime VALUES('COMP0216',2,'8A','월');
+INSERT INTO coursetime VALUES('COMP0216',2,'8B','월');
+INSERT INTO coursetime VALUES('COMP0216',2,'7A','수');
+INSERT INTO coursetime VALUES('COMP0216',2,'7B','수');
+INSERT INTO coursetime VALUES('COMP0216',2,'8A','수');
+INSERT INTO coursetime VALUES('COMP0216',2,'8B','수');
+INSERT INTO coursetime VALUES('COMP0216',3,'7A','월');
+INSERT INTO coursetime VALUES('COMP0216',3,'7B','월');
+INSERT INTO coursetime VALUES('COMP0216',3,'8A','월');
+INSERT INTO coursetime VALUES('COMP0216',3,'8B','월');
+INSERT INTO coursetime VALUES('COMP0216',3,'7A','수');
+INSERT INTO coursetime VALUES('COMP0216',3,'7B','수');
+INSERT INTO coursetime VALUES('COMP0216',3,'8A','수');
+INSERT INTO coursetime VALUES('COMP0216',3,'8B','수');
+INSERT INTO coursetime VALUES('COMP0216',4,'7A','월');
+INSERT INTO coursetime VALUES('COMP0216',4,'7B','월');
+INSERT INTO coursetime VALUES('COMP0216',4,'8A','월');
+INSERT INTO coursetime VALUES('COMP0216',4,'8B','월');
+INSERT INTO coursetime VALUES('COMP0216',4,'7A','수');
+INSERT INTO coursetime VALUES('COMP0216',4,'7B','수');
+INSERT INTO coursetime VALUES('COMP0216',4,'8A','수');
+INSERT INTO coursetime VALUES('COMP0216',4,'8B','수');
+INSERT INTO coursetime VALUES('COMP0224',2,'7A','화');
+INSERT INTO coursetime VALUES('COMP0224',2,'7B','화');
+INSERT INTO coursetime VALUES('COMP0224',2,'8A','화');
+INSERT INTO coursetime VALUES('COMP0224',2,'5B','목');
+INSERT INTO coursetime VALUES('COMP0224',2,'6A','목');
+INSERT INTO coursetime VALUES('COMP0224',2,'6B','목');
+INSERT INTO coursetime VALUES('COMP0224',3,'5B','화');
+INSERT INTO coursetime VALUES('COMP0224',3,'6A','화');
+INSERT INTO coursetime VALUES('COMP0224',3,'6B','화');
+INSERT INTO coursetime VALUES('COMP0224',3,'7A','목');
+INSERT INTO coursetime VALUES('COMP0224',3,'7B','목');
+INSERT INTO coursetime VALUES('COMP0224',3,'8A','목');
+INSERT INTO coursetime VALUES('COMP0224',5,'5B','화');
+INSERT INTO coursetime VALUES('COMP0224',5,'6A','화');
+INSERT INTO coursetime VALUES('COMP0224',5,'6B','화');
+INSERT INTO coursetime VALUES('COMP0224',5,'7A','목');
+INSERT INTO coursetime VALUES('COMP0224',5,'7B','목');
+INSERT INTO coursetime VALUES('COMP0224',5,'8A','목');
+INSERT INTO coursetime VALUES('COMP0312',2,'7A','화');
+INSERT INTO coursetime VALUES('COMP0312',2,'7B','화');
+INSERT INTO coursetime VALUES('COMP0312',2,'8A','화');
+INSERT INTO coursetime VALUES('COMP0312',2,'5B','목');
+INSERT INTO coursetime VALUES('COMP0312',2,'6A','목');
+INSERT INTO coursetime VALUES('COMP0312',2,'6B','목');
+INSERT INTO coursetime VALUES('COMP0312',3,'5B','수');
+INSERT INTO coursetime VALUES('COMP0312',3,'6A','수');
+INSERT INTO coursetime VALUES('COMP0312',3,'6B','수');
+INSERT INTO coursetime VALUES('COMP0312',3,'5B','목');
+INSERT INTO coursetime VALUES('COMP0312',3,'6A','목');
+INSERT INTO coursetime VALUES('COMP0312',3,'6B','목');
+INSERT INTO coursetime VALUES('COMP0322',2,'6A','화');
+INSERT INTO coursetime VALUES('COMP0322',2,'6B','화');
+INSERT INTO coursetime VALUES('COMP0322',2,'7A','화');
+INSERT INTO coursetime VALUES('COMP0322',2,'7B','화');
+INSERT INTO coursetime VALUES('COMP0322',2,'8A','화');
+INSERT INTO coursetime VALUES('COMP0322',2,'8B','화');
+INSERT INTO coursetime VALUES('COMP0322',2,'9A','화');
+INSERT INTO coursetime VALUES('COMP0322',2,'9B','화');
+INSERT INTO coursetime VALUES('COMP0322',3,'6A','화');
+INSERT INTO coursetime VALUES('COMP0322',3,'6B','화');
+INSERT INTO coursetime VALUES('COMP0322',3,'7A','화');
+INSERT INTO coursetime VALUES('COMP0322',3,'7B','화');
+INSERT INTO coursetime VALUES('COMP0322',3,'8A','화');
+INSERT INTO coursetime VALUES('COMP0322',3,'8B','화');
+INSERT INTO coursetime VALUES('COMP0322',3,'9A','화');
+INSERT INTO coursetime VALUES('COMP0322',3,'9B','화');
+INSERT INTO coursetime VALUES('COMP0322',4,'6A','목');
+INSERT INTO coursetime VALUES('COMP0322',4,'6B','목');
+INSERT INTO coursetime VALUES('COMP0322',4,'7A','목');
+INSERT INTO coursetime VALUES('COMP0322',4,'7B','목');
+INSERT INTO coursetime VALUES('COMP0322',4,'8A','목');
+INSERT INTO coursetime VALUES('COMP0322',4,'8B','목');
+INSERT INTO coursetime VALUES('COMP0322',4,'9A','목');
+INSERT INTO coursetime VALUES('COMP0322',4,'9B','목');
+INSERT INTO coursetime VALUES('COMP0322',5,'1A','목');
+INSERT INTO coursetime VALUES('COMP0322',5,'1B','목');
+INSERT INTO coursetime VALUES('COMP0322',5,'2A','목');
+INSERT INTO coursetime VALUES('COMP0322',5,'2B','목');
+INSERT INTO coursetime VALUES('COMP0322',5,'3A','목');
+INSERT INTO coursetime VALUES('COMP0322',5,'3B','목');
+INSERT INTO coursetime VALUES('COMP0322',5,'4A','목');
+INSERT INTO coursetime VALUES('COMP0322',5,'4B','목');
+INSERT INTO coursetime VALUES('COMP0322',6,'1A','화');
+INSERT INTO coursetime VALUES('COMP0322',6,'1B','화');
+INSERT INTO coursetime VALUES('COMP0322',6,'2A','화');
+INSERT INTO coursetime VALUES('COMP0322',6,'2B','화');
+INSERT INTO coursetime VALUES('COMP0322',6,'3A','화');
+INSERT INTO coursetime VALUES('COMP0322',6,'3B','화');
+INSERT INTO coursetime VALUES('COMP0322',6,'4A','화');
+INSERT INTO coursetime VALUES('COMP0322',6,'4B','화');
+INSERT INTO coursetime VALUES('COMP0328',1,'6A','금');
+INSERT INTO coursetime VALUES('COMP0328',1,'6B','금');
+INSERT INTO coursetime VALUES('COMP0328',1,'7A','금');
+INSERT INTO coursetime VALUES('COMP0328',1,'7B','금');
+INSERT INTO coursetime VALUES('COMP0328',1,'8A','금');
+INSERT INTO coursetime VALUES('COMP0328',1,'8B','금');
+INSERT INTO coursetime VALUES('COMP0328',1,'9A','금');
+INSERT INTO coursetime VALUES('COMP0328',1,'9B','금');
+INSERT INTO coursetime VALUES('COMP0328',2,'1A','금');
+INSERT INTO coursetime VALUES('COMP0328',2,'1B','금');
+INSERT INTO coursetime VALUES('COMP0328',2,'2A','금');
+INSERT INTO coursetime VALUES('COMP0328',2,'2B','금');
+INSERT INTO coursetime VALUES('COMP0328',2,'3A','금');
+INSERT INTO coursetime VALUES('COMP0328',2,'3B','금');
+INSERT INTO coursetime VALUES('COMP0328',2,'4A','금');
+INSERT INTO coursetime VALUES('COMP0328',2,'4B','금');
+INSERT INTO coursetime VALUES('COMP0328',2,'1A','금');
+INSERT INTO coursetime VALUES('COMP0328',2,'1B','금');
+INSERT INTO coursetime VALUES('COMP0328',2,'2A','금');
+INSERT INTO coursetime VALUES('COMP0328',2,'2B','금');
+INSERT INTO coursetime VALUES('COMP0328',2,'3A','금');
+INSERT INTO coursetime VALUES('COMP0328',2,'3B','금');
+INSERT INTO coursetime VALUES('COMP0328',2,'4A','금');
+INSERT INTO coursetime VALUES('COMP0328',2,'4B','금');
+INSERT INTO coursetime VALUES('COMP0328',3,'1A','금');
+INSERT INTO coursetime VALUES('COMP0328',3,'1B','금');
+INSERT INTO coursetime VALUES('COMP0328',3,'2A','금');
+INSERT INTO coursetime VALUES('COMP0328',3,'2B','금');
+INSERT INTO coursetime VALUES('COMP0328',3,'3A','금');
+INSERT INTO coursetime VALUES('COMP0328',3,'3B','금');
+INSERT INTO coursetime VALUES('COMP0328',3,'4A','금');
+INSERT INTO coursetime VALUES('COMP0328',3,'4B','금');
+INSERT INTO coursetime VALUES('COMP0411',5,'5B','화');
+INSERT INTO coursetime VALUES('COMP0411',5,'6A','화');
+INSERT INTO coursetime VALUES('COMP0411',5,'6B','화');
+INSERT INTO coursetime VALUES('COMP0411',5,'7A','목');
+INSERT INTO coursetime VALUES('COMP0411',5,'7B','목');
+INSERT INTO coursetime VALUES('COMP0411',5,'8A','목');
+INSERT INTO coursetime VALUES('COMP0411',6,'7A','월');
+INSERT INTO coursetime VALUES('COMP0411',6,'7B','월');
+INSERT INTO coursetime VALUES('COMP0411',6,'8A','월');
+INSERT INTO coursetime VALUES('COMP0411',6,'8B','수');
+INSERT INTO coursetime VALUES('COMP0411',6,'9A','수');
+INSERT INTO coursetime VALUES('COMP0411',6,'9B','수');
+INSERT INTO coursetime VALUES('COMP0411',7,'7A','화');
+INSERT INTO coursetime VALUES('COMP0411',7,'7B','화');
+INSERT INTO coursetime VALUES('COMP0411',7,'8A','화');
+INSERT INTO coursetime VALUES('COMP0411',7,'5B','목');
+INSERT INTO coursetime VALUES('COMP0411',7,'6A','목');
+INSERT INTO coursetime VALUES('COMP0411',7,'6B','목');
+INSERT INTO coursetime VALUES('COMP0411',8,'1A','월');
+INSERT INTO coursetime VALUES('COMP0411',8,'1B','월');
+INSERT INTO coursetime VALUES('COMP0411',8,'2A','월');
+INSERT INTO coursetime VALUES('COMP0411',8,'1A','수');
+INSERT INTO coursetime VALUES('COMP0411',8,'1B','수');
+INSERT INTO coursetime VALUES('COMP0411',8,'2A','수');
+INSERT INTO coursetime VALUES('COMP0423',1,'7A','월');
+INSERT INTO coursetime VALUES('COMP0423',1,'7B','월');
+INSERT INTO coursetime VALUES('COMP0423',1,'8A','월');
+INSERT INTO coursetime VALUES('COMP0423',1,'8B','수');
+INSERT INTO coursetime VALUES('COMP0423',1,'9A','수');
+INSERT INTO coursetime VALUES('COMP0423',1,'9B','수');
+INSERT INTO coursetime VALUES('COMP0428',1,'2B','월');
+INSERT INTO coursetime VALUES('COMP0428',1,'3A','월');
+INSERT INTO coursetime VALUES('COMP0428',1,'3B','월');
+INSERT INTO coursetime VALUES('COMP0428',1,'2B','수');
+INSERT INTO coursetime VALUES('COMP0428',1,'3A','수');
+INSERT INTO coursetime VALUES('COMP0428',1,'3B','수');
+INSERT INTO coursetime VALUES('COMP0453',1,'6A','화');
+INSERT INTO coursetime VALUES('COMP0453',1,'6B','화');
+INSERT INTO coursetime VALUES('COMP0453',1,'7A','화');
+INSERT INTO coursetime VALUES('COMP0453',1,'7B','화');
+INSERT INTO coursetime VALUES('COMP0453',1,'8A','화');
+INSERT INTO coursetime VALUES('COMP0453',1,'8B','화');
+INSERT INTO coursetime VALUES('COMP0453',1,'9A','화');
+INSERT INTO coursetime VALUES('COMP0453',1,'9B','화');
+INSERT INTO coursetime VALUES('COMP0453',2,'1A','금');
+INSERT INTO coursetime VALUES('COMP0453',2,'1B','금');
+INSERT INTO coursetime VALUES('COMP0453',2,'2A','금');
+INSERT INTO coursetime VALUES('COMP0453',2,'2B','금');
+INSERT INTO coursetime VALUES('COMP0453',2,'3A','금');
+INSERT INTO coursetime VALUES('COMP0453',2,'3B','금');
+INSERT INTO coursetime VALUES('COMP0453',2,'4A','금');
+INSERT INTO coursetime VALUES('COMP0453',2,'4B','금');
+INSERT INTO coursetime VALUES('COMP0453',3,'6A','목');
+INSERT INTO coursetime VALUES('COMP0453',3,'6B','목');
+INSERT INTO coursetime VALUES('COMP0453',3,'7A','목');
+INSERT INTO coursetime VALUES('COMP0453',3,'7B','목');
+INSERT INTO coursetime VALUES('COMP0453',3,'8A','목');
+INSERT INTO coursetime VALUES('COMP0453',3,'8B','목');
+INSERT INTO coursetime VALUES('COMP0453',3,'9A','목');
+INSERT INTO coursetime VALUES('COMP0453',3,'9B','목');
+INSERT INTO coursetime VALUES('GLSO0213',1,'6A','목');
+INSERT INTO coursetime VALUES('GLSO0213',1,'6B','목');
+INSERT INTO coursetime VALUES('GLSO0213',1,'7A','목');
+INSERT INTO coursetime VALUES('GLSO0213',1,'7B','목');
+INSERT INTO coursetime VALUES('GLSO0213',1,'8A','목');
+INSERT INTO coursetime VALUES('GLSO0213',1,'8B','목');
+INSERT INTO coursetime VALUES('GLSO0213',1,'9A','목');
+INSERT INTO coursetime VALUES('GLSO0213',1,'9B','목');
+INSERT INTO coursetime VALUES('GLSO0213',2,'6A','화');
+INSERT INTO coursetime VALUES('GLSO0213',2,'6B','화');
+INSERT INTO coursetime VALUES('GLSO0213',2,'7A','화');
+INSERT INTO coursetime VALUES('GLSO0213',2,'7B','화');
+INSERT INTO coursetime VALUES('GLSO0213',2,'8A','화');
+INSERT INTO coursetime VALUES('GLSO0213',2,'8B','화');
+INSERT INTO coursetime VALUES('GLSO0213',2,'9A','화');
+INSERT INTO coursetime VALUES('GLSO0213',2,'9B','화');
+INSERT INTO coursetime VALUES('GLSO0217',1,'1A','수');
+INSERT INTO coursetime VALUES('GLSO0217',1,'1B','수');
+INSERT INTO coursetime VALUES('GLSO0217',1,'2A','수');
+INSERT INTO coursetime VALUES('GLSO0217',1,'2B','수');
+INSERT INTO coursetime VALUES('GLSO0217',1,'3A','수');
+INSERT INTO coursetime VALUES('GLSO0217',1,'3B','수');
+INSERT INTO coursetime VALUES('GLSO0217',1,'4A','수');
+INSERT INTO coursetime VALUES('GLSO0217',1,'4B','수');
+INSERT INTO coursetime VALUES('GLSO0217',2,'1A','목');
+INSERT INTO coursetime VALUES('GLSO0217',2,'1B','목');
+INSERT INTO coursetime VALUES('GLSO0217',2,'2A','목');
+INSERT INTO coursetime VALUES('GLSO0217',2,'2B','목');
+INSERT INTO coursetime VALUES('GLSO0217',2,'3A','목');
+INSERT INTO coursetime VALUES('GLSO0217',2,'3B','목');
+INSERT INTO coursetime VALUES('GLSO0217',2,'4A','목');
+INSERT INTO coursetime VALUES('GLSO0217',2,'4B','목');
+INSERT INTO coursetime VALUES('ITEC0418',1,'1A','토');
+INSERT INTO coursetime VALUES('ITEC0418',1,'1B','토');
+INSERT INTO coursetime VALUES('ITEC0418',1,'2A','토');
+INSERT INTO coursetime VALUES('ITEC0418',1,'2B','토');
+INSERT INTO coursetime VALUES('ITEC0418',1,'3A','토');
+INSERT INTO coursetime VALUES('ITEC0418',1,'3B','토');
+INSERT INTO coursetime VALUES('ITEC0419',1,'7A','월');
+INSERT INTO coursetime VALUES('ITEC0419',1,'7B','월');
+INSERT INTO coursetime VALUES('ITEC0419',1,'8A','월');
+INSERT INTO coursetime VALUES('ITEC0419',1,'7A','수');
+INSERT INTO coursetime VALUES('ITEC0419',1,'7B','수');
+INSERT INTO coursetime VALUES('ITEC0419',1,'8A','수');
+INSERT INTO coursetime VALUES('ITEC0424',1,'5B','월');
+INSERT INTO coursetime VALUES('ITEC0424',1,'6A','월');
+INSERT INTO coursetime VALUES('ITEC0424',1,'6B','월');
+INSERT INTO coursetime VALUES('ITEC0424',1,'5B','수');
+INSERT INTO coursetime VALUES('ITEC0424',1,'6A','수');
+INSERT INTO coursetime VALUES('ITEC0424',1,'6B','수');
+
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','CLTR0003',5,'김령환','산격동 캠퍼스 IT대학5호관(IT융복합관)','251',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','CLTR0003',6,'박소은','산격동 캠퍼스 IT대학5호관(IT융복합관)','248',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','CLTR0043',7,'최현미','산격동 캠퍼스 IT대학5호관(IT융복합관)','B102',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','CLTR0089',4,'조성표','산격동 캠퍼스 IT대학5호관(IT융복합관)','B102',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','CLTR0205',36,'홍미주','산격동 캠퍼스 IT대학5호관(IT융복합관)','324',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','CLTR0205',37,'이원동','산격동 캠퍼스 IT대학5호관(IT융복합관)','251',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','CLTR0205',38,'구태운','산격동 캠퍼스 IT대학5호관(IT융복합관)','248',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','CLTR0205',39,'김도경','산격동 캠퍼스 IT대학5호관(IT융복합관)','348',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COME0301',10,'박혜영','산격동 캠퍼스 IT대학4호관(제2학생회관)','104',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COME0301',11,'이시형','산격동 캠퍼스 IT대학5호관(IT융복합관)','342',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COME0301',12,'김진욱','산격동 캠퍼스 IT대학5호관(IT융복합관)','B102',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COME0301',13,'아난드 폴','산격동 캠퍼스 IT대학5호관(IT융복합관)','348',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COME0301',14,'김진욱','산격동 캠퍼스 IT대학5호관(IT융복합관)','342',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COME0311',5,'이종택','산격동 캠퍼스 IT대학5호관(IT융복합관)','345',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COME0311',6,'문재경','산격동 캠퍼스 IT대학5호관(IT융복합관)','345',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COME0331',6,'류은경','산격동 캠퍼스 IT대학4호관(제2학생회관)','104',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COME0331',7,'김구진','산격동 캠퍼스 IT대학5호관(IT융복합관)','348',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COME0331',8,'김정홍','산격동 캠퍼스 IT대학5호관(IT융복합관)','351',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COME0331',9,'이은주','산격동 캠퍼스 IT대학5호관(IT융복합관)','224',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COME0368',1,'김경훈','산격동 캠퍼스 IT대학5호관(IT융복합관)','348',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COMP0204',1,'배준현','산격동 캠퍼스 IT대학5호관(IT융복합관)','301',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COMP0204',2,'부희형','산격동 캠퍼스 공대12호관','209',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COMP0204',3,'이성희','산격동 캠퍼스 IT대학5호관(IT융복합관)','309',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COMP0204',4,'정기숙','산격동 캠퍼스 IT대학4호관(제2학생회관)','106',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COMP0216',1,'류은경','산격동 캠퍼스 IT대학4호관(제2학생회관)','106',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COMP0216',2,'김구진','산격동 캠퍼스 IT대학5호관(IT융복합관)','301',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COMP0216',3,'김정홍','산격동 캠퍼스 IT대학5호관(IT융복합관)','355',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COMP0216',4,'이은주','산격동 캠퍼스 IT대학5호관(IT융복합관)','224',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COMP0224',2,'김동선','산격동 캠퍼스 IT대학5호관(IT융복합관)','342',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COMP0224',3,'최윤자','산격동 캠퍼스 IT대학5호관(IT융복합관)','345',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COMP0224',5,'김동선','산격동 캠퍼스 IT대학5호관(IT융복합관)','342',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COMP0312',2,'김명석','산격동 캠퍼스 IT대학5호관(IT융복합관)','B101',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COMP0312',3,'정설영','산격동 캠퍼스 IT대학5호관(IT융복합관)','345',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COMP0322',2,'서영균','산격동 캠퍼스 IT대학5호관(IT융복합관)','355',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COMP0322',3,'이용주','산격동 캠퍼스 IT대학5호관(IT융복합관)','245',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COMP0322',4,'서영균','산격동 캠퍼스 IT대학5호관(IT융복합관)','355',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COMP0322',5,'이용주','산격동 캠퍼스 IT대학5호관(IT융복합관)','245',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COMP0322',6,'정인욱','산격동 캠퍼스 IT대학5호관(IT융복합관)','355',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COMP0328',1,'정기숙','산격동 캠퍼스 IT대학4호관(제2학생회관)','106',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COMP0328',2,'정창수','산격동 캠퍼스 IT대학5호관(IT융복합관)','224',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COMP0328',4,'정창수','산격동 캠퍼스 IT대학5호관(IT융복합관)','224',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COMP0328',3,'정기숙','산격동 캠퍼스 IT대학4호관(제2학생회관)','106',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COMP0411',5,'김명석','산격동 캠퍼스 IT대학5호관(IT융복합관)','B101',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COMP0411',6,'김정근','산격동 캠퍼스 IT대학5호관(IT융복합관)','B101',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COMP0411',7,'탁병철','산격동 캠퍼스 IT대학5호관(IT융복합관)','B102',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COMP0411',8,'김용태','산격동 캠퍼스 IT대학5호관(IT융복합관)','B101',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COMP0423',1,'권영우','산격동 캠퍼스 IT대학4호관(제2학생회관)','104',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COMP0428',1,'백낙훈','산격동 캠퍼스 IT대학5호관(IT융복합관)','B101',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COMP0453',1,'김정근','산격동 캠퍼스 IT대학5호관(IT융복합관)','224',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COMP0453',2,'배준현','산격동 캠퍼스 IT대학5호관(IT융복합관)','301',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','COMP0453',3,'안병준','산격동 캠퍼스 IT대학5호관(IT융복합관)','224',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','GLSO0213',1,'박보석','산격동 캠퍼스 IT대학5호관(IT융복합관)','248',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','GLSO0213',2,'김지영','산격동 캠퍼스 IT대학5호관(IT융복합관)','248',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','GLSO0217',1,'정창수','산격동 캠퍼스 IT대학5호관(IT융복합관)','355',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','GLSO0217',2,'정창수','산격동 캠퍼스 IT대학5호관(IT융복합관)','355',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','ITEC0418',1,'백낙훈','산격동 캠퍼스 IT대학5호관(IT융복합관)','B101',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','ITEC0419',1,'정순기','산격동 캠퍼스 IT대학5호관(IT융복합관)','B102',2,0);
+INSERT INTO course VALUES('2022-2','컴퓨터학부 글로벌소프트웨어융합전공','ITEC0424',1,'정순기','산격동 캠퍼스 IT대학5호관(IT융복합관)','B102',2,0);
+
+CREATE TABLE SUGANGPACK(
+	id MEDIUMINT NOT NULL AUTO_INCREMENT,
+	StudentID INT(10) NOT NULL,
+	GeneralCourseCode VARCHAR(8),
+	CourseClassNumber INT(2),
+	PRIMARY KEY(id)	
+);
+		
+CREATE TABLE SUGANGTIME(
+	id MEDIUMINT NOT NULL AUTO_INCREMENT,
+	StudentID INT(10) NOT NULL,
+	CourseTimeCode VARCHAR(3) NOT NULL,
+	CourseTimeWeek VARCHAR(9) NOT NULL,
+	PRIMARY KEY(id)
+);
+
+DROP TRIGGER IF EXISTS update_sugang_time;
+DELIMITER $$
+CREATE TRIGGER update_sugang_time
+	AFTER INSERT
+	ON sugangpack
+	FOR EACH ROW
+
+BEGIN
+	DECLARE done INT DEFAULT FALSE;
+	DECLARE timeCode VARCHAR(3);
+	DECLARE week VARCHAR(9);
+
+	DECLARE getTime CURSOR FOR
+	SELECT CourseTimeCode, CourseTimeWeek FROM coursetime 
+		WHERE GeneralCourseCode = NEW.GeneralCourseCode and 
+		CourseClassNumber = NEW.CourseClassNumber;
+
+	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+	OPEN getTime;
+
+	update_sugangtime : LOOP
+
+		FETCH getTime INTO timeCode, week;
+	
+		IF done THEN
+			LEAVE update_sugangtime;
+		END IF;
+
+		INSERT INTO sugangtime(StudentID,CourseTimeCode,CourseTimeWeek)
+		VALUES(NEW.StudentID,timeCode,week);
+
+			
+
+	END LOOP;
+	CLOSE getTime;
+
+	UPDATE course SET StudTake = StudTake + 1
+	WHERE GeneralCourseCode = NEW.GeneralCourseCode and 
+	CourseClassNumber = NEW.CourseClassNumber; 
+
+END $$
+
+DELIMITER ;
+
+
+DROP TRIGGER IF EXISTS delete_sugang_time;
+DELIMITER $$
+CREATE TRIGGER delete_sugang_time
+	AFTER DELETE
+	ON sugangpack
+	FOR EACH ROW
+
+BEGIN
+	DECLARE done INT DEFAULT FALSE;
+	DECLARE timeCode VARCHAR(3);
+	DECLARE week VARCHAR(9);
+
+	DECLARE deleteTime CURSOR FOR
+	SELECT CourseTimeCode, CourseTimeWeek FROM coursetime 
+		WHERE GeneralCourseCode = OLD.GeneralCourseCode and 
+		CourseClassNumber = OLD.CourseClassNumber;
+
+	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+	OPEN deleteTime;
+
+	delete_sugangtime : LOOP
+		
+		FETCH deleteTime INTO timeCode, week;
+
+		IF done THEN
+			LEAVE delete_sugangtime;
+		END IF;
+
+		DELETE FROM sugangtime 
+		WHERE CourseTimeCode = timeCode and CourseTimeWeek = week
+		and StudentID = OLD.StudentID;
+
+	END LOOP;
+	CLOSE deleteTime;
+
+	UPDATE course SET StudTake = StudTake - 1
+	WHERE GeneralCourseCode = OLD.GeneralCourseCode and 
+	CourseClassNumber = OLD.CourseClassNumber; 
+
+	
+END $$
+DELIMITER ;

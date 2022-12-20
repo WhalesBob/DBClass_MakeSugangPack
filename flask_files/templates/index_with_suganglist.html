@@ -1,0 +1,29 @@
+{% extends 'index.html' %}
+{% block suganglist %}
+<h3> 수강꾸러미 현황 </h3>
+<table class = 'table table-striped' border = '1'>
+{% if sugangpack | length > 0 %}
+    <tr>
+        <td>Course Code</td>
+        <td>Course Name</td>
+        <td>Credit</td>
+    </tr>
+    {% for class in sugangpack %}
+    <tr>
+        {% if class[1] < 10 %}
+            <td id = "CourseCode">{{class[0]}}-00{{class[1]}}</td>
+        {% elif class[1] < 100 %}
+            <td id = "CourseCode">{{class[0]}}-0{{class[1]}}</td>
+        {% else %}
+            <td id = "CourseCode">{{class[0]}}-{{class[1]}}</td>
+        {% endif %}    
+        <td id = "CourseName">{{class[2]}}</td>
+        <td id = "Credit">{{class[3]}}</td>
+    </tr>
+    {% endfor %}
+{% else %}
+    <p>수강꾸러미 내역이 아직 존재하지 않습니다.</p>
+{% endif %}
+</table>   
+<b>Total Credits : {{totalCredit}} </b>
+{% endblock %}
